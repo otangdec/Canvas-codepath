@@ -140,7 +140,7 @@ class ViewController: UIViewController {
         if panGestureRecognizer.state == UIGestureRecognizerState.Began {
             initialCenter = (panGestureRecognizer.view?.center)!
         } else if panGestureRecognizer.state == UIGestureRecognizerState.Changed {
-        newlyCreatedFace.center = CGPoint( x: initialCenter.x + translation.x, y: translation.y )
+        newlyCreatedFace.center = CGPoint( x: 100 + translation.x, y: 100 + translation.y )
 
         } else if panGestureRecognizer.state == UIGestureRecognizerState.Ended {
 
