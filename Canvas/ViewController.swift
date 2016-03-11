@@ -18,10 +18,16 @@ class ViewController: UIViewController {
     var trayCenterWhenClosed: CGPoint!
     
     let bottomFrameCoord = UIWindow(frame: UIScreen.mainScreen().bounds).frame.height
+    var trayViewOpenPosition: CGFloat!
+    var trayViewClosePosition: CGFloat!
+    var isTrayViewOpen: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        trayViewOpenPosition = bottomFrameCoord - trayView.frame.height
+        trayViewClosePosition = self.bottomFrameCoord - 40
+        isTrayViewOpen = true
     }
 
     @IBAction func onTrayPanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
@@ -46,16 +52,18 @@ class ViewController: UIViewController {
             if panGestureRecognizer.velocityInView(trayView).y > 0 {
                 trayCenterWhenClosed = trayView.center
                 UIView.animateWithDuration(0.4, animations: {
-                    self.trayView.frame.origin.y = self.bottomFrameCoord - 40
+                    self.trayView.frame.origin.y = self.trayViewClosePosition
                 })
+                isTrayViewOpen = false
             }
                 
-            // if moving down
+            // if moving up
             else {
                 trayCenterWhenOpen = trayView.center
                 UIView.animateWithDuration(0.4, animations: {
-                    self.trayView.frame.origin.y = self.bottomFrameCoord - self.trayView.frame.height
+                    self.trayView.frame.origin.y = self.trayViewOpenPosition
                 })
+                isTrayViewOpen = true
             }
 
             
@@ -65,6 +73,19 @@ class ViewController: UIViewController {
             
         }
     }
+    
+    @IBAction func onTrayTapGesture(sender: AnyObject) {
+        if isTrayViewOpen == true {
+            self.trayView.frame.origin.y = self.trayViewClosePosition
+            isTrayViewOpen = false
+        } else {
+            self.trayView.frame.origin.y = self.trayViewOpenPosition
+            isTrayViewOpen = true
+        }
+
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

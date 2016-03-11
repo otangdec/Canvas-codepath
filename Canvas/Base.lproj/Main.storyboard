@@ -58,6 +58,7 @@
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="p40-j2-Wdc" appends="YES" id="YrH-2z-mXt"/>
+                                    <outletCollection property="gestureRecognizers" destination="LSa-48-MK7" appends="YES" id="ADI-JE-PT4"/>
                                 </connections>
                             </view>
                         </subviews>
@@ -74,6 +75,11 @@
                         <action selector="onTrayPanGesture:" destination="BYZ-38-t0r" id="l8g-5i-VzP"/>
                     </connections>
                 </panGestureRecognizer>
+                <tapGestureRecognizer id="LSa-48-MK7">
+                    <connections>
+                        <action selector="onTrayTapGesture:" destination="BYZ-38-t0r" id="eGd-pM-GBq"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="162" y="357"/>
         </scene>
