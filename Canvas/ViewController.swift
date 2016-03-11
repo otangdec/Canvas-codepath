@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     var isTrayViewOpen: Bool!
     
     var newlyCreatedFace: UIImageView!
+    var panGestureRecognizer: UIPanGestureRecognizer!
     
     @IBOutlet weak var deadFaceImage: UIImageView!
     
@@ -32,6 +33,8 @@ class ViewController: UIViewController {
         trayViewOpenPosition = bottomFrameCoord - trayView.frame.height
         trayViewClosePosition = self.bottomFrameCoord - 40
         isTrayViewOpen = true
+        
+        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "onImagePanGesture:")
     }
 
     @IBAction func onTrayPanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
@@ -101,9 +104,13 @@ class ViewController: UIViewController {
         if panGestureRecognizer.state == UIGestureRecognizerState.Began {
             // Gesture recognizers know the view they are attached to
             let imageView = panGestureRecognizer.view as! UIImageView
+            var panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "onCustomPan:")
             
             // Create a new image view that has the same image as the one currently panning
             newlyCreatedFace = UIImageView(image: imageView.image)
+            newlyCreatedFace.userInteractionEnabled = true
+            newlyCreatedFace.addGestureRecognizer(panGestureRecognizer)
+
             
             // Add the new face to the tray's parent view.
             view.addSubview(newlyCreatedFace)
@@ -117,6 +124,7 @@ class ViewController: UIViewController {
             print("Gesture began at: \(point)")
             
         } else if panGestureRecognizer.state == UIGestureRecognizerState.Changed {
+            // ****** FIX THIS *****
             newlyCreatedFace.center = CGPoint(x: initialCenter.x + translation.x, y: trayView.center.y + translation.y )
             print("Gesture changed at: \(point)")
             
@@ -125,6 +133,19 @@ class ViewController: UIViewController {
         }
     }
     
+    func onCustomPan(panGestureRecognizer: UIPanGestureRecognizer) {
+        var initialCenter: CGPoint!
+        let translation = panGestureRecognizer.translationInView(view)
+        
+        if panGestureRecognizer.state == UIGestureRecognizerState.Began {
+            initialCenter = (panGestureRecognizer.view?.center)!
+        } else if panGestureRecognizer.state == UIGestureRecognizerState.Changed {
+        newlyCreatedFace.center = CGPoint( x: initialCenter.x + translation.x, y: translation.y )
+
+        } else if panGestureRecognizer.state == UIGestureRecognizerState.Ended {
+
+    }
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
