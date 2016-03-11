@@ -22,6 +22,10 @@ class ViewController: UIViewController {
     var trayViewClosePosition: CGFloat!
     var isTrayViewOpen: Bool!
     
+    var newlyCreatedFace: UIImageView!
+    
+    @IBOutlet weak var deadFaceImage: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -85,6 +89,41 @@ class ViewController: UIViewController {
 
     }
     
+    @IBAction func onImagePanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
+        let point = panGestureRecognizer.locationInView(view)
+        
+        // Total translation (x,y) over time in parent view's coordinate system
+        let translation = panGestureRecognizer.translationInView(view)
+        var faceOriginalCenter: CGPoint!
+        faceOriginalCenter = panGestureRecognizer.view?.center
+        var initialCenter = faceOriginalCenter
+        
+        if panGestureRecognizer.state == UIGestureRecognizerState.Began {
+            // Gesture recognizers know the view they are attached to
+            let imageView = panGestureRecognizer.view as! UIImageView
+            
+            // Create a new image view that has the same image as the one currently panning
+            newlyCreatedFace = UIImageView(image: imageView.image)
+            
+            // Add the new face to the tray's parent view.
+            view.addSubview(newlyCreatedFace)
+            
+            // Initialize the position of the new face.
+            newlyCreatedFace.center = imageView.center
+            
+            // Since the original face is in the tray, but the new face is in the
+            // main view, you have to offset the coordinates
+            newlyCreatedFace.center.y -= trayView.center.y
+            print("Gesture began at: \(point)")
+            
+        } else if panGestureRecognizer.state == UIGestureRecognizerState.Changed {
+            newlyCreatedFace.center = CGPoint(x: initialCenter.x + translation.x, y: trayView.center.y + translation.y )
+            print("Gesture changed at: \(point)")
+            
+        } else if panGestureRecognizer.state == UIGestureRecognizerState.Ended {
+            print("Gesture ended at: \(point)")
+        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
